@@ -1,9 +1,9 @@
 <?php
 
 /*
-Plugin Name: WPCF7 Google reCaptcha v3 Policies
-Description: ContactForm7で、Google reCaptchaの利用規約に関するテキストの挿入と、追従する利用規約の表示を消します。
-Version: 1.2
+Plugin Name: WPCF7 Google reCAPTCHA v3 Policies
+Description: ContactForm7で、Google reCAPTCHAの利用規約に関するテキストの挿入と、追従する利用規約の表示を消します。
+Version: 1.3
 Author: With-Planning
 Author URI: https://with-planning.co.jp
 License: GPL2
