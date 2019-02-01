@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPCF7 Google reCaptcha v3 Policies
 Description: ContactForm7で、Google reCaptchaの利用規約に関するテキストの挿入と、追従する利用規約の表示を消します。
-Version: 1.1
+Version: 1.2
 Author: With-Planning
 Author URI: https://with-planning.co.jp
 License: GPL2
@@ -13,20 +13,24 @@ wp_add_inline_style('contact-form-7', '<style>.grecaptcha-badge{opacity: 0;}</st
 
 add_shortcode('recaptcha_v3_policies', function($atts){
 	$atts = shortcode_atts( array(
-		'lang' => 'en',
+		'lang' => get_option('WPLANG'),
 	), $atts, 'recaptcha_v3_policies' );
 
 	ob_start();
 	if($atts['lang'] === 'ja'):
 	?>
+    <div class="wpcf7-grv3-policies-container">
         このサイトはreCAPTCHAによって保護されており、Googleの
         <a href="https://policies.google.com/privacy">プライバシーポリシー</a>と
         <a href="https://policies.google.com/terms">利用規約</a>が適用されます。
+    </div>
 	<?php
     else: ?>
+    <div class="wpcf7-grv3-policies-container">
         This site is protected by reCAPTCHA and the Google
         <a href="https://policies.google.com/privacy">Privacy Policy</a> and
         <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+    </div>
     <?php
     endif;
 	$contents = ob_get_contents();
@@ -36,20 +40,47 @@ add_shortcode('recaptcha_v3_policies', function($atts){
 });
 
 if(function_exists('wpcf7_add_shortcode')){
-	wpcf7_add_form_tag('recaptcha_v3_policies', function(){
-	    // TODO CF7のタグにパラメータを指定して、日英と言語を切り替えられるようにしたい。
 
-        ob_start();
-        ?>
-        This site is protected by reCAPTCHA and the Google
-        <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-        <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-        <?php
-        $contents = ob_get_contents();
-        ob_end_clean();
+	/**
+	 * @param $tag WPCF7_FormTag
+	 *
+	 * @return false|string
+	 */
+	function recaptcha_v3_policies_callback($tag){
+		// TODO CF7のタグにパラメータを指定して、日英と言語を切り替えられるようにしたい。
 
-        return $contents;
-    });
+        // タグから言語設定を取得する
+		$lang = $tag->get_option('lang', '', true);
+
+		// 言語の指定がない場合、WordPressの設定を使う
+		if(empty($lang)){
+		    $lang = get_option('WPLANG');
+        }
+
+		ob_start();
+		if($lang === 'ja'):
+		?>
+        <div class="wpcf7-grv3-policies-container">
+            このサイトはreCAPTCHAによって保護されており、Googleの
+            <a href="https://policies.google.com/privacy">プライバシーポリシー</a>と
+            <a href="https://policies.google.com/terms">利用規約</a>が適用されます。
+        </div>
+		<?php
+        else: ?>
+        <div class="wpcf7-grv3-policies-container">
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+        </div>
+        <?php endif;
+
+		$contents = ob_get_contents();
+		ob_end_clean();
+
+		return $contents;
+	}
+
+	wpcf7_add_form_tag('recaptcha_v3_policies', 'recaptcha_v3_policies_callback');
 
     if(class_exists('WPCF7_TagGenerator')){
 	    WPCF7_TagGenerator::get_instance()->add('wpcf7_add_shortcode', 'GRv3利用規約', function(){
