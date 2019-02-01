@@ -4,7 +4,7 @@
 Plugin Name: WPCF7 Google reCAPTCHA v3 Policies
 Description: ContactForm7で、Google reCAPTCHAの利用規約に関するテキストの挿入と、追従する利用規約の表示を消します。
 Version: 1.4
-Author: With-Planning
+Author: With-Planning & Web Studio TANI
 Author URI: https://with-planning.co.jp
 License: GPL2
 */
