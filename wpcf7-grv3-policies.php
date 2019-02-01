@@ -3,13 +3,15 @@
 /*
 Plugin Name: WPCF7 Google reCAPTCHA v3 Policies
 Description: ContactForm7で、Google reCAPTCHAの利用規約に関するテキストの挿入と、追従する利用規約の表示を消します。
-Version: 1.3
+Version: 1.4
 Author: With-Planning
 Author URI: https://with-planning.co.jp
 License: GPL2
 */
 
-wp_add_inline_style('contact-form-7', '<style>.grecaptcha-badge{opacity: 0;}</style>');
+add_action( 'wp_enqueue_scripts', function(){
+	wp_add_inline_style('contact-form-7', '<style>.grecaptcha-badge{opacity: 0;}</style>');
+} );
 
 add_shortcode('recaptcha_v3_policies', function($atts){
 	$atts = shortcode_atts( array(
@@ -39,7 +41,7 @@ add_shortcode('recaptcha_v3_policies', function($atts){
 	return $contents;
 });
 
-if(function_exists('wpcf7_add_shortcode')){
+if(function_exists('wpcf7_add_form_tag')){
 
 	/**
 	 * @param $tag WPCF7_FormTag
